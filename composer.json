@@ -1,8 +1,14 @@
 {
-    "name": "openai-php/laravel",
+    "name": "atarim/openai-php-laravel",
     "description": "OpenAI PHP for Laravel is a supercharged PHP API client that allows you to interact with the Open AI API",
     "keywords": ["laravel","php", "openai", "sdk", "codex", "GPT-3", "DALL-E", "api", "client", "natural", "language", "processing"],
     "license": "MIT",
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/Atarim-Team/openai-php-client.git"
+        }
+    ],
     "authors": [
         {
             "name": "Nuno Maduro",
@@ -13,7 +19,7 @@
         "php": "^8.2.0",
         "guzzlehttp/guzzle": "^7.9.3",
         "laravel/framework": "^11.29|^12.12",
-        "openai-php/client": "^0.15.0"
+        "atarim/openai-php-client": "dev-main"
     },
     "require-dev": {
         "laravel/pint": "^1.22.0",
