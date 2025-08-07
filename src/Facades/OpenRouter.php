@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace OpenAI\Laravel\Facades;
+namespace OpenRouter\Laravel\Facades;
 
 use Illuminate\Support\Facades\Facade;
 use OpenAI\Contracts\ResponseContract;
-use OpenAI\Laravel\Testing\OpenAIFake;
 use OpenAI\Responses\StreamResponse;
+use OpenRouter\Laravel\Testing\OpenRouterFake;
 
 /**
  * @method static \OpenAI\Resources\Assistants assistants()
@@ -29,22 +29,22 @@ use OpenAI\Responses\StreamResponse;
  * @method static \OpenAI\Resources\Threads threads()
  * @method static \OpenAI\Resources\VectorStores vectorStores()
  */
-final class OpenAI extends Facade
+final class OpenRouter extends Facade
 {
     /**
      * Get the registered name of the component.
      */
     protected static function getFacadeAccessor(): string
     {
-        return 'openai';
+        return 'openrouter';
     }
 
     /**
      * @param  array<array-key, ResponseContract|StreamResponse|string>  $responses
      */
-    public static function fake(array $responses = []): OpenAIFake /** @phpstan-ignore-line */
+    public static function fake(array $responses = []): OpenRouterFake /** @phpstan-ignore-line */
     {
-        $fake = new OpenAIFake($responses);
+        $fake = new OpenRouterFake($responses);
         self::swap($fake);
 
         return $fake;

@@ -1,24 +1,24 @@
 <?php
 
 test('exceptions')
-    ->expect('OpenAI\Laravel\Exceptions')
+    ->expect('OpenRouter\Laravel\Exceptions')
     ->toUseNothing();
 
 test('facades')
-    ->expect('OpenAI\Laravel\Facades\OpenAI')
+    ->expect('OpenRouter\Laravel\Facades\OpenRouter')
     ->toOnlyUse([
         'Illuminate\Support\Facades\Facade',
         'OpenAI\Contracts\ResponseContract',
-        'OpenAI\Laravel\Testing\OpenAIFake',
+        'OpenRouter\Laravel\Testing\OpenRouterFake',
         'OpenAI\Responses\StreamResponse',
     ]);
 
 test('service providers')
-    ->expect('OpenAI\Laravel\ServiceProvider')
+    ->expect('OpenRouter\Laravel\ServiceProvider')
     ->toOnlyUse([
         'GuzzleHttp\Client',
         'Illuminate\Support\ServiceProvider',
-        'OpenAI\Laravel',
+        'OpenRouter\Laravel',
         'OpenAI',
         'Illuminate\Contracts\Support\DeferrableProvider',
 

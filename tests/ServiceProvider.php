@@ -3,14 +3,14 @@
 use Illuminate\Config\Repository;
 use OpenAI\Client;
 use OpenAI\Contracts\ClientContract;
-use OpenAI\Laravel\Exceptions\ApiKeyIsMissing;
-use OpenAI\Laravel\ServiceProvider;
+use OpenRouter\Laravel\Exceptions\ApiKeyIsMissing;
+use OpenRouter\Laravel\ServiceProvider;
 
 it('binds the client on the container', function () {
     $app = app();
 
     $app->bind('config', fn () => new Repository([
-        'openai' => [
+        'openrouter' => [
             'api_key' => 'test',
         ],
     ]));
@@ -24,7 +24,7 @@ it('binds the client on the container as singleton', function () {
     $app = app();
 
     $app->bind('config', fn () => new Repository([
-        'openai' => [
+        'openrouter' => [
             'api_key' => 'test',
         ],
     ]));
@@ -46,7 +46,7 @@ it('requires an api key', function () {
     $app->get(Client::class);
 })->throws(
     ApiKeyIsMissing::class,
-    'The OpenAI API Key is missing. Please publish the [openai.php] configuration file and set the [api_key].',
+    'The OpenRouter API Key is missing. Please publish the [openrouter.php] configuration file and set the [api_key].',
 );
 
 it('provides', function () {
@@ -57,6 +57,6 @@ it('provides', function () {
     expect($provides)->toBe([
         Client::class,
         ClientContract::class,
-        'openai',
+        'openrouter',
     ]);
 });

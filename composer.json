@@ -1,7 +1,7 @@
 {
-    "name": "atarim/openai-php-laravel",
-    "description": "OpenAI PHP for Laravel is a supercharged PHP API client that allows you to interact with the Open AI API",
-    "keywords": ["laravel","php", "openai", "sdk", "codex", "GPT-3", "DALL-E", "api", "client", "natural", "language", "processing"],
+    "name": "atarim/openrouter-php-laravel",
+    "description": "OpenRouter PHP for Laravel is a supercharged PHP API client that allows you to interact with the OpenRouter API",
+    "keywords": ["laravel","php", "openrouter", "openai", "sdk", "codex", "GPT-3", "DALL-E", "api", "client", "natural", "language", "processing"],
     "license": "MIT",
     "repositories": [
         {
@@ -30,7 +30,7 @@
     },
     "autoload": {
         "psr-4": {
-            "OpenAI\\Laravel\\": "src/"
+            "OpenRouter\\Laravel\\": "src/"
         }
     },
     "autoload-dev": {
@@ -51,7 +51,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "OpenAI\\Laravel\\ServiceProvider"
+                "OpenRouter\\Laravel\\ServiceProvider"
             ]
         }
     },

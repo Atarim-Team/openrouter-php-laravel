@@ -1,32 +1,32 @@
 <?php
 
 use Illuminate\Config\Repository;
-use OpenAI\Laravel\Facades\OpenAI;
-use OpenAI\Laravel\ServiceProvider;
 use OpenAI\Resources\Completions;
 use OpenAI\Responses\Completions\CreateResponse;
+use OpenRouter\Laravel\Facades\OpenRouter;
+use OpenRouter\Laravel\ServiceProvider;
 use PHPUnit\Framework\ExpectationFailedException;
 
 it('resolves resources', function () {
     $app = app();
 
     $app->bind('config', fn () => new Repository([
-        'openai' => [
+        'openrouter' => [
             'api_key' => 'test',
         ],
     ]));
 
     (new ServiceProvider($app))->register();
 
-    OpenAI::setFacadeApplication($app);
+    OpenRouter::setFacadeApplication($app);
 
-    $completions = OpenAI::completions();
+    $completions = OpenRouter::completions();
 
     expect($completions)->toBeInstanceOf(Completions::class);
 });
 
 test('fake returns the given response', function () {
-    OpenAI::fake([
+    OpenRouter::fake([
         CreateResponse::fake([
             'choices' => [
                 [
@@ -36,7 +36,7 @@ test('fake returns the given response', function () {
         ]),
     ]);
 
-    $completion = OpenAI::completions()->create([
+    $completion = OpenRouter::completions()->create([
         'model' => 'gpt-3.5-turbo-instruct',
         'prompt' => 'PHP is ',
     ]);
@@ -45,35 +45,35 @@ test('fake returns the given response', function () {
 });
 
 test('fake throws an exception if there is no more given response', function () {
-    OpenAI::fake([
+    OpenRouter::fake([
         CreateResponse::fake(),
     ]);
 
-    OpenAI::completions()->create([
+    OpenRouter::completions()->create([
         'model' => 'gpt-3.5-turbo-instruct',
         'prompt' => 'PHP is ',
     ]);
 
-    OpenAI::completions()->create([
+    OpenRouter::completions()->create([
         'model' => 'gpt-3.5-turbo-instruct',
         'prompt' => 'PHP is ',
     ]);
 })->expectExceptionMessage('No fake responses left');
 
 test('append more fake responses', function () {
-    OpenAI::fake([
+    OpenRouter::fake([
         CreateResponse::fake([
             'id' => 'cmpl-1',
         ]),
     ]);
 
-    OpenAI::addResponses([
+    OpenRouter::addResponses([
         CreateResponse::fake([
             'id' => 'cmpl-2',
         ]),
     ]);
 
-    $completion = OpenAI::completions()->create([
+    $completion = OpenRouter::completions()->create([
         'model' => 'gpt-3.5-turbo-instruct',
         'prompt' => 'PHP is ',
     ]);
@@ -81,7 +81,7 @@ test('append more fake responses', function () {
     expect($completion)
         ->id->toBe('cmpl-1');
 
-    $completion = OpenAI::completions()->create([
+    $completion = OpenRouter::completions()->create([
         'model' => 'gpt-3.5-turbo-instruct',
         'prompt' => 'PHP is ',
     ]);
@@ -91,16 +91,16 @@ test('append more fake responses', function () {
 });
 
 test('fake can assert a request was sent', function () {
-    OpenAI::fake([
+    OpenRouter::fake([
         CreateResponse::fake(),
     ]);
 
-    OpenAI::completions()->create([
+    OpenRouter::completions()->create([
         'model' => 'gpt-3.5-turbo-instruct',
         'prompt' => 'PHP is ',
     ]);
 
-    OpenAI::assertSent(Completions::class, function (string $method, array $parameters): bool {
+    OpenRouter::assertSent(Completions::class, function (string $method, array $parameters): bool {
         return $method === 'create' &&
             $parameters['model'] === 'gpt-3.5-turbo-instruct' &&
             $parameters['prompt'] === 'PHP is ';
@@ -108,11 +108,11 @@ test('fake can assert a request was sent', function () {
 });
 
 test('fake throws an exception if a request was not sent', function () {
-    OpenAI::fake([
+    OpenRouter::fake([
         CreateResponse::fake(),
     ]);
 
-    OpenAI::assertSent(Completions::class, function (string $method, array $parameters): bool {
+    OpenRouter::assertSent(Completions::class, function (string $method, array $parameters): bool {
         return $method === 'create' &&
             $parameters['model'] === 'gpt-3.5-turbo-instruct' &&
             $parameters['prompt'] === 'PHP is ';
@@ -120,16 +120,16 @@ test('fake throws an exception if a request was not sent', function () {
 })->expectException(ExpectationFailedException::class);
 
 test('fake can assert a request was sent on the resource', function () {
-    OpenAI::fake([
+    OpenRouter::fake([
         CreateResponse::fake(),
     ]);
 
-    OpenAI::completions()->create([
+    OpenRouter::completions()->create([
         'model' => 'gpt-3.5-turbo-instruct',
         'prompt' => 'PHP is ',
     ]);
 
-    OpenAI::completions()->assertSent(function (string $method, array $parameters): bool {
+    OpenRouter::completions()->assertSent(function (string $method, array $parameters): bool {
         return $method === 'create' &&
             $parameters['model'] === 'gpt-3.5-turbo-instruct' &&
             $parameters['prompt'] === 'PHP is ';
@@ -137,80 +137,80 @@ test('fake can assert a request was sent on the resource', function () {
 });
 
 test('fake can assert a request was sent n times', function () {
-    OpenAI::fake([
+    OpenRouter::fake([
         CreateResponse::fake(),
         CreateResponse::fake(),
     ]);
 
-    OpenAI::completions()->create([
+    OpenRouter::completions()->create([
         'model' => 'gpt-3.5-turbo-instruct',
         'prompt' => 'PHP is ',
     ]);
 
-    OpenAI::completions()->create([
+    OpenRouter::completions()->create([
         'model' => 'gpt-3.5-turbo-instruct',
         'prompt' => 'PHP is ',
     ]);
 
-    OpenAI::assertSent(Completions::class, 2);
+    OpenRouter::assertSent(Completions::class, 2);
 });
 
 test('fake throws an exception if a request was not sent n times', function () {
-    OpenAI::fake([
+    OpenRouter::fake([
         CreateResponse::fake(),
         CreateResponse::fake(),
     ]);
 
-    OpenAI::completions()->create([
+    OpenRouter::completions()->create([
         'model' => 'gpt-3.5-turbo-instruct',
         'prompt' => 'PHP is ',
     ]);
 
-    OpenAI::assertSent(Completions::class, 2);
+    OpenRouter::assertSent(Completions::class, 2);
 })->expectException(ExpectationFailedException::class);
 
 test('fake can assert a request was not sent', function () {
-    OpenAI::fake();
+    OpenRouter::fake();
 
-    OpenAI::assertNotSent(Completions::class);
+    OpenRouter::assertNotSent(Completions::class);
 });
 
 test('fake throws an exception if a unexpected request was sent', function () {
-    OpenAI::fake([
+    OpenRouter::fake([
         CreateResponse::fake(),
     ]);
 
-    OpenAI::completions()->create([
+    OpenRouter::completions()->create([
         'model' => 'gpt-3.5-turbo-instruct',
         'prompt' => 'PHP is ',
     ]);
 
-    OpenAI::assertNotSent(Completions::class);
+    OpenRouter::assertNotSent(Completions::class);
 })->expectException(ExpectationFailedException::class);
 
 test('fake can assert a request was not sent on the resource', function () {
-    OpenAI::fake([
+    OpenRouter::fake([
         CreateResponse::fake(),
     ]);
 
-    OpenAI::completions()->assertNotSent();
+    OpenRouter::completions()->assertNotSent();
 });
 
 test('fake can assert no request was sent', function () {
-    OpenAI::fake();
+    OpenRouter::fake();
 
-    OpenAI::assertNothingSent();
+    OpenRouter::assertNothingSent();
 });
 
 test('fake throws an exception if any request was sent when non was expected', function () {
-    OpenAI::fake([
+    OpenRouter::fake([
         CreateResponse::fake(),
     ]);
 
-    OpenAI::completions()->create([
+    OpenRouter::completions()->create([
         'model' => 'gpt-3.5-turbo-instruct',
         'prompt' => 'PHP is ',
     ]);
 
-    OpenAI::assertNothingSent();
+    OpenRouter::assertNothingSent();
 })->expectException(ExpectationFailedException::class);

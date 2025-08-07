@@ -1,17 +1,15 @@
 <?php
 
-namespace OpenAI\Laravel\Commands;
+namespace OpenRouter\Laravel\Commands;
 
 use Illuminate\Console\Command;
-use OpenAI\Laravel\ServiceProvider;
-use OpenAI\Laravel\Support\View;
+use OpenRouter\Laravel\ServiceProvider;
+use OpenRouter\Laravel\Support\View;
 
 class InstallCommand extends Command
 {
     private const LINKS = [
-        'Repository' => 'https://github.com/openai-php/laravel',
-        'OpenAI PHP Docs' => 'https://github.com/openai-php/client#readme',
-        'Join us on Telegram' => 'https://t.me/+66GDs6UM6RcxY2U8',
+        'Repository' => 'https://github.com/Atarim-Team/openrouter-php-laravel',
     ];
 
     private const FUNDING_LINKS = [
@@ -19,9 +17,9 @@ class InstallCommand extends Command
         'Sponsor Nuno' => 'https://github.com/sponsors/nunomaduro',
     ];
 
-    protected $signature = 'openai:install';
+    protected $signature = 'openrouter:install';
 
-    protected $description = 'Prepares the OpenAI client for use.';
+    protected $description = 'Prepares the OpenRouter client for use.';
 
     public function handle(): void
     {
@@ -29,7 +27,7 @@ class InstallCommand extends Command
 
         View::render('components.badge', [
             'type' => 'INFO',
-            'content' => 'Installing OpenAI for Laravel.',
+            'content' => 'Installing OpenRouter for Laravel.',
         ]);
 
         $this->copyConfig();
@@ -47,7 +45,7 @@ class InstallCommand extends Command
 
         View::render('components.badge', [
             'type' => 'INFO',
-            'content' => 'Open your .env and add your OpenAI API key and organization id.',
+            'content' => 'Open your .env and add your OpenRouter API key and organization id.',
         ]);
 
         if ($wantsToSupport) {
@@ -57,9 +55,9 @@ class InstallCommand extends Command
 
     private function copyConfig(): void
     {
-        if (file_exists(config_path('openai.php'))) {
+        if (file_exists(config_path('openrouter.php'))) {
             View::render('components.two-column-detail', [
-                'left' => 'config/openai.php',
+                'left' => 'config/openrouter.php',
                 'right' => 'File already exists.',
             ]);
 
@@ -67,7 +65,7 @@ class InstallCommand extends Command
         }
 
         View::render('components.two-column-detail', [
-            'left' => 'config/openai.php',
+            'left' => 'config/openrouter.php',
             'right' => 'File created.',
         ]);
 
@@ -93,7 +91,7 @@ class InstallCommand extends Command
             return;
         }
 
-        if (str_contains($fileContent, 'OPENAI_API_KEY')) {
+        if (str_contains($fileContent, 'OPENROUTER_API_KEY')) {
             View::render('components.two-column-detail', [
                 'left' => $envFile,
                 'right' => 'Variables already exists.',
@@ -102,11 +100,11 @@ class InstallCommand extends Command
             return;
         }
 
-        file_put_contents(base_path($envFile), PHP_EOL.'OPENAI_API_KEY='.PHP_EOL.'OPENAI_ORGANIZATION='.PHP_EOL, FILE_APPEND);
+        file_put_contents(base_path($envFile), PHP_EOL.'OPENROUTER_API_KEY='.PHP_EOL.'OPENROUTER_ORGANIZATION='.PHP_EOL, FILE_APPEND);
 
         View::render('components.two-column-detail', [
             'left' => $envFile,
-            'right' => 'OPENAI_API_KEY and OPENAI_ORGANIZATION variables added.',
+            'right' => 'OPENROUTER_API_KEY and OPENROUTER_ORGANIZATION variables added.',
         ]);
     }
 
@@ -116,19 +114,19 @@ class InstallCommand extends Command
             return false;
         }
 
-        return $this->confirm(' <options=bold>Wanna show OpenAI for Laravel some love by starring it on GitHub?</>', false);
+        return $this->confirm(' <options=bold>Wanna show OpenRouter for Laravel some love by starring it on GitHub?</>', false);
     }
 
     private function openRepositoryInBrowser(): void
     {
         if (PHP_OS_FAMILY == 'Darwin') {
-            exec('open https://github.com/openai-php/laravel');
+            exec('open https://github.com/Atarim-Team/openrouter-php-laravel');
         }
         if (PHP_OS_FAMILY == 'Windows') {
-            exec('start https://github.com/openai-php/laravel');
+            exec('start https://github.com/Atarim-Team/openrouter-php-laravel');
         }
         if (PHP_OS_FAMILY == 'Linux') {
-            exec('xdg-open https://github.com/openai-php/laravel');
+            exec('xdg-open https://github.com/Atarim-Team/openrouter-php-laravel');
         }
     }
 
