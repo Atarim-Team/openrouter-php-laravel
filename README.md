@@ -36,14 +36,12 @@ Finally, you may use the `OpenRouter` facade to access the OpenRouter API:
 ```php
 use OpenRouter\Laravel\Facades\OpenRouter;
 
-$result = OpenRouter::chat()->create([
-    'model' => 'gpt-4o-mini',
-    'messages' => [
-        ['role' => 'user', 'content' => 'Hello!'],
-    ],
+$result = OpenRouter::responses()->create([
+    'model' => 'gpt-5',
+    'input' => 'Hello!',
 ]);
 
-echo $result->choices[0]->message->content; // Hello! How can I assist you today?
+echo $response->outputText; // Hello! How can I assist you today?
 ```
 
 ## Configuration
@@ -113,21 +111,23 @@ OpenRouter::fake([
     ]),
 ]);
 
-$completion = OpenRouter::completions()->create([
-    'model' => 'gpt-4o-mini',
-    'prompt' => 'PHP is ',
+$completion = OpenRouter::responses()->create([
+    'model' => 'gpt-5',
+    'input' => 'PHP is ',
 ]);
 
-expect($completion['choices'][0]['text'])->toBe('awesome!');
+expect($response->outputText)->toBe('awesome!');
 ```
 
 After the requests have been sent there are various methods to ensure that the expected requests were sent:
 
 ```php
+use OpenAI\Resources\Responses;
+
 // assert completion create request was sent
-OpenAI::assertSent(Completions::class, function (string $method, array $parameters): bool {
+OpenAI::assertSent(Responses::class, function (string $method, array $parameters): bool {
     return $method === 'create' &&
-        $parameters['model'] === 'gpt-4o-mini' &&
+        $parameters['model'] === 'gpt-5' &&
         $parameters['prompt'] === 'PHP is ';
 });
 ```
