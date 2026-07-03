@@ -35,7 +35,13 @@ final class ServiceProvider extends BaseServiceProvider implements DeferrablePro
             $client = OpenAI::factory()
                 ->withApiKey($apiKey)
                 ->withOrganization($organization)
-                ->withHttpClient(new \GuzzleHttp\Client(['timeout' => config('openrouter.request_timeout', 30)]));
+                ->withHttpClient(new \GuzzleHttp\Client([
+                    'timeout' => config('openrouter.request_timeout', 30),
+                    'curl' => [
+                        CURLOPT_LOW_SPEED_LIMIT => (int) config('openrouter.stream_idle_bytes_per_sec', 1),
+                        CURLOPT_LOW_SPEED_TIME => (int) config('openrouter.stream_idle_timeout', 90),
+                    ],
+                ]));
 
             if (is_string($project)) {
                 $client->withProject($project);
